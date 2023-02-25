@@ -25,7 +25,13 @@ SECRET_KEY = "django-insecure-pd&w016(#3#_th*$r03ak@%e^o(6qhua=#-#b2oxvt_y1dg(em
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+if DEBUG:
+    INTERNAL_IPS = [
+        "192.168.1.4",
+        "127.0.0.1",
+    ]
 
 
 # Application definition
@@ -42,16 +48,19 @@ INSTALLED_APPS = [
     "mainapp",
     "authapp",
     "crispy_forms",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -160,7 +169,6 @@ SOCIAL_AUTH_GITHUB_SECRET = "ec7ef6f936bdc97944d9f10ee35c40411104abe2"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-
 LOG_FILE = BASE_DIR / "var" / "log" / "main_log.log"
 
 LOGGING = {
@@ -187,44 +195,6 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = ["*"]
-
-if DEBUG:
-    INTERNAL_IPS = [
-        "192.168.1.4",
-        "127.0.0.1",
-    ]
-
-
-# Application definition
-
-INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "markdownify.apps.MarkdownifyConfig",
-    "social_django",
-    "mainapp",
-    "authapp",
-    "crispy_forms",
-    "debug_toolbar",
-]
-
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
-]
-
-# In the end of file
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -257,3 +227,7 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379"
 # Email as files for debug
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "var/email-messages/"
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
+
+SELENIUM_DRIVER_PATH_FF = BASE_DIR / "var" / "selenium" / "geckodriver"
